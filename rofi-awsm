@@ -1,0 +1,73 @@
+AWESOME_JSON_REPO="repos/Awesome.json"
+BROWSER="chromium"
+
+#  UPDATE REPO
+# ===================
+
+update_json_repo(){
+    cd "$AWESOME_JSON_REPO"
+        git pull origin
+}
+
+#  SEARCH REPO
+# ===================
+
+search_json_repo(){
+
+    cd "$AWESOME_JSON_REPO/repo-json/"
+# Get Topic filename
+        TOPIC=$(for f in *; do [ -f "$f" ] && echo "$f"; done  | rofi -i -dmenu -m -2 -fullscreen -p "TOPIC:" -normal-window)
+
+# Prefix Topic Filename Full Path
+        TOPIC_PATH="$AWESOME_JSON_REPO/repo-json/""$TOPIC"
+
+# Get App Name
+        cd ../../..
+        APP_NAME=$(jq -r '.[] | .name + " => (" + .description + ")"'  "$TOPIC_PATH" | rofi -i -dmenu -fullscreen  -p "APP:" -normal-window)
+
+
+# Remove Description form app names
+        CLEANED_APP_NAME=$(echo $APP_NAME | sed -E "s/=>.*$//g")
+        FINAL_APP_NAME=$(echo "$CLEANED_APP_NAME"| sed 's/"//g; s/\ //g' ) #Clean whitespace
+
+# Open App URL
+        APP_URL=$(jq -r --arg FINAL_APP_NAME "$FINAL_APP_NAME" '.[] | select(.name==$FINAL_APP_NAME) | .url '  "$TOPIC_PATH")
+
+#Return Value
+        echo $APP_URL
+}
+
+# USAGE - CMD OPTIONS
+# ====================
+
+usage(){
+    echo "Usage: "
+        echo "Rofi - Awesome List"
+        echo -e "\t -b  Browser to open the URL"
+        echo -e "\t -s  Search awesome list"
+        echo -e "\t -u  Update awesome list repository"
+        echo -e "\t -h  help"
+        exit 2
+}
+
+while getopts 'b:suh' c
+do
+    case $c in
+    b) CUSTOM_BROWSER=$OPTARG;;
+    s) ;;
+    u) update_json_repo;;
+    h) usage ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# CHECK FOR CUSTOM BROWSER
+# ========================
+if [[ -n "$CUSTOM_BROWSER" ]]
+then
+    URL="$(search_json_repo)"
+    setsid -f   $CUSTOM_BROWSER $URL >/dev/null 2>&1
+else
+    URL="$(search_json_repo)"
+    setsid -f   $BROWSER $URL >/dev/null 2>&1
+fi
