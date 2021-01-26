@@ -6,7 +6,7 @@ BROWSER="chromium"
 
 update_json_repo(){
     cd "$AWESOME_JSON_REPO"
-        git pull origin
+    git submodule update --remote --merge
 }
 
 #  SEARCH REPO
@@ -23,18 +23,18 @@ search_json_repo(){
 
 # Get App Name
         cd ../..
-        APP_NAME=$(jq -r '.[] | .name + " => (" + .description + ")"'  "$TOPIC_PATH" | rofi -i -dmenu -fullscreen  -p "APP:" -normal-window)
+        PROJECT_NAME=$(jq -r '.[] | .name + " => (" + .description + ")"'  "$TOPIC_PATH" | rofi -i -dmenu -fullscreen  -p "PROJECT:" -normal-window)
 
 
 # Remove Description form app names
-        CLEANED_APP_NAME=$(echo $APP_NAME | sed -E "s/=>.*$//g")
-        FINAL_APP_NAME=$(echo "$CLEANED_APP_NAME"| sed 's/"//g; s/\ //g' ) #Clean whitespace
+        CLEANED_PROJECT_NAME=$(echo $PROJECT_NAME | sed -E "s/=>.*$//g")
+        FINAL_PROJECT_NAME=$(echo "$CLEANED_PROJECT_NAME"| sed 's/"//g; s/\ //g' ) #Clean whitespace
 
 # Open App URL
-        APP_URL=$(jq -r --arg FINAL_APP_NAME "$FINAL_APP_NAME" '.[] | select(.name==$FINAL_APP_NAME) | .url '  "$TOPIC_PATH")
+        PROJECT_URL=$(jq -r --arg FINAL_PROJECT_NAME "$FINAL_PROJECT_NAME" '.[] | select(.name==$FINAL_PROJECT_NAME) | .url '  "$TOPIC_PATH")
 
 #Return Value
-        echo $APP_URL
+        echo $PROJECT_URL
 }
 
 # USAGE - CMD OPTIONS
