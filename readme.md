@@ -1,7 +1,7 @@
 # rofi-awsm
 
-A bash script to search [Awesome](https://github.com/sindresorhus/awesome)
-list by using [rofi](https://github.com/DaveDavenport/rofi).
+A bash script to search [Awesome List](https://github.com/sindresorhus/awesome)
+ by using [rofi](https://github.com/DaveDavenport/rofi).
 
 ## Usage
 
@@ -15,7 +15,8 @@ Rofi - Awesome List
 
 ```
 
-* Search for a particular project from the awesome list
+* Search for a particular project from the awesome list and open the URL in the
+    default browser
 
 ```
   rofi-awsm -s
