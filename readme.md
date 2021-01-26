@@ -3,16 +3,25 @@
 A bash script to search [Awesome](https://github.com/sindresorhus/awesome)
 list by using [rofi](https://github.com/DaveDavenport/rofi).
 
+## Usage
 
-## Features
+```
+Usage:
+Rofi - Awesome List
+         -b  Browser to open the URL
+         -s  Search awesome list
+         -u  Update awesome list repository
+         -h  help
 
-* Search for an particular project from the awesome list
+```
+
+* Search for a particular project from the awesome list
 
 ```
   rofi-awsm -s
 ```
 
-* Specify your default browser in the script itself at the top
+* You can specify your default browser in the script itself
 
 ```
  rofi-aswm
@@ -20,7 +29,7 @@ list by using [rofi](https://github.com/DaveDavenport/rofi).
  BROWSER="{DEFAULT_BROWSER}"
 ```
 
-* Specify your custom browser
+* Or you can specify your custom browser while running the command
 
 ```
 rofi-awsm -s  -b firefox
