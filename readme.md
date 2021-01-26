@@ -33,7 +33,7 @@ Rofi - Awesome List
 * Or you can specify your custom browser while running the command
 
 ```
-rofi-awsm -s  -b firefox
+rofi-awsm -s -b firefox
 ```
 
 
