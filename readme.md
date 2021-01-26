@@ -6,19 +6,9 @@ list by using [rofi](https://github.com/DaveDavenport/rofi).
 
 ## Features
 
-* Search for an particular project from the awesome list
-
-  ```
-Usage:
-Rofi - Awesome List
-         -b  Browser to open the URL
-         -s  Search awesome list
-         -u  Update awesome list repository
-         -h  help
-
-  ```
 
 * Search for an particular project from the awesome list
+
   ```
   rofi-awsm -s
   ```
