@@ -1,4 +1,4 @@
-AWESOME_JSON_REPO="repos/Awesome.json"
+AWESOME_JSON_REPO="Awesome.json"
 BROWSER="chromium"
 
 #  UPDATE REPO
@@ -22,7 +22,7 @@ search_json_repo(){
         TOPIC_PATH="$AWESOME_JSON_REPO/repo-json/""$TOPIC"
 
 # Get App Name
-        cd ../../..
+        cd ../..
         APP_NAME=$(jq -r '.[] | .name + " => (" + .description + ")"'  "$TOPIC_PATH" | rofi -i -dmenu -fullscreen  -p "APP:" -normal-window)
 
 
