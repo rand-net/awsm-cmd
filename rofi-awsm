@@ -9,22 +9,20 @@ update_json_repo(){
     git submodule update --remote --merge
 }
 
-#  SEARCH REPO
+#  SEARCH REPO - ROFI
 # ===================
 
-search_json_repo(){
+search_json_repo_rofi(){
 
     cd "$AWESOME_JSON_REPO/repo-json/"
 # Get Topic filename
         TOPIC=$(for f in *; do [ -f "$f" ] && echo "$f"; done  | rofi -i -dmenu -m -2 -fullscreen -p "TOPIC:" -normal-window)
-
 # Prefix Topic Filename Full Path
         TOPIC_PATH="$AWESOME_JSON_REPO/repo-json/""$TOPIC"
 
 # Get App Name
         cd ../..
         PROJECT_NAME=$(jq -r '.[] | .name + " => (" + .description + ")"'  "$TOPIC_PATH" | rofi -i -dmenu -fullscreen  -p "PROJECT:" -normal-window)
-
 
 # Remove Description form app names
         CLEANED_PROJECT_NAME=$(echo $PROJECT_NAME | sed -E "s/=>.*$//g")
@@ -37,6 +35,34 @@ search_json_repo(){
         echo $PROJECT_URL
 }
 
+
+#  SEARCH REPO - FZF
+# ===================
+
+search_json_repo_fzf(){
+
+    cd "$AWESOME_JSON_REPO/repo-json/"
+# Get Topic filename
+        TOPIC=$(for f in *; do [ -f "$f" ] && echo "$f"; done  | fzf -m -e --prompt "TOPIC:")
+# Prefix Topic Filename Full Path
+        TOPIC_PATH="$AWESOME_JSON_REPO/repo-json/""$TOPIC"
+
+# Get App Name
+        cd ../..
+        PROJECT_NAME=$(jq -r '.[] | .name + " => (" + .description + ")"'  "$TOPIC_PATH" | fzf -m -e --prompt "PROJECT:")
+
+# Remove Description form app names
+        CLEANED_PROJECT_NAME=$(echo $PROJECT_NAME | sed -E "s/=>.*$//g")
+        FINAL_PROJECT_NAME=$(echo "$CLEANED_PROJECT_NAME"| sed 's/"//g; s/\ //g' ) #Clean whitespace
+
+# Open App URL
+        PROJECT_URL=$(jq -r --arg FINAL_PROJECT_NAME "$FINAL_PROJECT_NAME" '.[] | select(.name==$FINAL_PROJECT_NAME) | .url '  "$TOPIC_PATH")
+
+#Return Value
+        echo $PROJECT_URL
+}
+
+
 # USAGE - CMD OPTIONS
 # ====================
 
@@ -44,17 +70,19 @@ usage(){
     echo "Usage: "
         echo "Rofi - Awesome List"
         echo -e "\t -b  Browser to open the URL"
-        echo -e "\t -s  Search awesome list"
+        echo -e "\t -r  Search awesome list through rofi"
+        echo -e "\t -f  Search awesome list through fzf"
         echo -e "\t -u  Update awesome list repository"
         echo -e "\t -h  help"
         exit 2
 }
 
-while getopts 'b:suh' c
+while getopts 'b:rfuh' c
 do
     case $c in
     b) CUSTOM_BROWSER=$OPTARG;;
-    s) ;;
+    r) MENU="rofi";;
+    f) MENU="fzf";;
     u) update_json_repo;;
     h) usage ;;
     esac
@@ -65,9 +93,26 @@ shift $((OPTIND-1))
 # ========================
 if [[ -n "$CUSTOM_BROWSER" ]]
 then
-    URL="$(search_json_repo)"
-    setsid -f   $CUSTOM_BROWSER $URL >/dev/null 2>&1
+    echo $MENU
+    if [[ "$MENU" == "rofi" ]]
+        then
+            URL="$(search_json_repo_rofi)"
+            setsid -f   $CUSTOM_BROWSER $URL >/dev/null 2>&1
+
+    elif [[ "$MENU" == "fzf" ]]
+        then
+            URL="$(search_json_repo_fzf)"
+            setsid -f   $CUSTOM_BROWSER $URL >/dev/null 2>&1
+    fi
 else
-    URL="$(search_json_repo)"
-    setsid -f   $BROWSER $URL >/dev/null 2>&1
+    echo $MENU
+    if [[ "$MENU" == "rofi" ]]
+        then
+            URL="$(search_json_repo_rofi)"
+            setsid -f   $BROWSER $URL >/dev/null 2>&1
+    elif [[ "$MENU" == "fzf" ]]
+        then
+            URL="$(search_json_repo_fzf)"
+            setsid -f   $BROWSER $URL >/dev/null 2>&1
+    fi
 fi
