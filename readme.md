@@ -47,4 +47,4 @@ awsm-cli -r -b firefox
 * [git](https://git-scm.com/)
 * [jq](https://github.com/stedolan/jq)
 * sed
-* bash                                    ws
+* bash
