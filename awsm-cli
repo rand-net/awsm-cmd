@@ -68,7 +68,7 @@ search_json_repo_fzf(){
 
 usage(){
     echo "Usage: "
-        echo "Rofi - Awesome List"
+        echo "awsm-cli"
         echo -e "\t -b  Browser to open the URL"
         echo -e "\t -r  Search awesome list through rofi"
         echo -e "\t -f  Search awesome list through fzf"
