@@ -1,4 +1,4 @@
-# awsm-cli
+# awsm-cmd
 
 A bash script to search [Awesome List](https://github.com/sindresorhus/awesome)
 from the command-line.
@@ -7,7 +7,7 @@ from the command-line.
 
 ```
 Usage:
-awsm-cli
+awsm-cmd
          -b  Browser to open the URL
          -r  Search awesome list through rofi
          -f  Search awesome list through fzf
@@ -19,14 +19,14 @@ awsm-cli
     default browser
 
 ```
-  awsm-cli -r
+  awsm-cmd -r
 
 ```
 
 * You can specify a default browser in the script
 
 ```
- awsm-cli
+ awsm-cmd
  AWESOME_JSON_REPO="Awesome.json"
  BROWSER="{DEFAULT_BROWSER}"
 ```
@@ -35,7 +35,7 @@ awsm-cli
 
 ```
 
-awsm-cli -r -b firefox
+awsm-cmd -r -b firefox
 
 ```
 
